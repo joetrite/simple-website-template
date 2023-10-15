@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <!-- Page setup -->
@@ -24,7 +24,7 @@
     <!-- Visit: https://getbootstrap.com/docs/4.3/getting-started/introduction/ -->
     
   </head>
-  
+
   <body>
 
     <header id="header">
@@ -39,59 +39,7 @@
         <li><a href="#data-apis">Data APIs</a></li>
       </ul>                 
     </header>
-   
-    <div id="container">
-      <div class="inner">
-        <div id="content"> 
 
-
-<p>This is a Load Forecast tutorial.  We need to predict the load on the electric grid
-  for the next 72 hours to generate or purchase enough electricity to cover the load. We need to pick the device level on the grid we will estimate to do this.  The lowest level will be the meter (residential electric meter).  So, forecast the load needed on each meter and roll that data up to the substation.  Or we could use the substation load only in our estimation, which will work but is not as accurate or fine-grained as the meter level.
-</p><!doctype html>
-<html>
-  <head>
-    <!-- Page setup -->
-    <meta charset="utf-8">
-    <title>Application Development Insights</title>
-    <meta name="description" content="Application Development Insights">
-    <meta name="author" content="2289 Software">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-    <link rel="icon" type="image/png" href="favicon.png">
-  
-    <!-- Stylesheets -->
-    <!-- Reset default styles and add support for google fonts -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet" type="text/css" />
-    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
-   
-    <!-- Custom styles -->
-    <link href="style.css" rel="stylesheet" type="text/css" />
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>    
-
-    <!-- Want to add Bootstrap? -->
-    <!-- Visit: https://getbootstrap.com/docs/4.3/getting-started/introduction/ -->
-    
-  </head>
-  
-  <body>
-
-    <header id="header">
-      <img src="logo.jpg">
-      <h1>2298 Software</h1>
-     
-      <!-- Menu link fragment #id should match a div id. Example: <a href="#home"> links to <div id="home"></div>  -->
-      <ul class="main-menu">
-        <li><a href="#home">home</a></li>
-        <li><a href="#about">about</a></li>
-        <li><a href="#contact">contact</a></li>
-        <li><a href="#data-apis">Data APIs</a></li>
-      </ul>                 
-    </header>
-   
-    <div id="container">
-      <div class="inner">
-        <div id="content"> 
 
 <p>This tutorial is to predict the next 72-hour load for a single meter, which can run on my laptop.  I will later show you how to execute this process on thousands or millions of meters using a distributed execution engine like Apache Spark.  The code will  not change much; rather, it is wrapped into a PySpark UDF.  For now, let's stick to one meter</p>
 <div><br /></div>The key to accurate load forecasting is not your coding ability or which&nbsp;language or framework you use. The key is your domain knowledge of the&nbsp;subject you are forecasting.&nbsp;<div><br /></div><div>The best thing you can do as a data scientist it to increase your domain knowledge by learning all you can about electricity usage, specifically the scenarios that affect load (human electricity usage patterns.)</div><div><br /></div><div><ul style="text-align: left;"><li>What causes humans to consume more or less electricity?</li><li>Which appliances use the most electricity, and when are they used?</li><li>What is the effect of seasons on electricity usage?</li><li>Can we correlate usage with hours of the day?&nbsp;</li><li>Look at the min/max load for each hour, day, month, and year, and think about why it is the peak for the valley.</li></ul><div>Answers to these questions should drive your approach to constructing the features for your model.</div></div><div><br /></div><div>In the code below, I have a function for SuperBowl Sunday, which is a yearly American Football game that takes place in February.&nbsp; Many people change their habits that day and are at home or gathered together somewhere to watch the game.&nbsp; If you look at the data, you will see a difference in the usage data on that day.&nbsp; You might think that is irrelevant or that the playoffs should be added.&nbsp; That is where your creativity comes into play.&nbsp; Test if I'm wrong, and let me know. It may not affect and is a waste of time/CPU cycles.&nbsp; It's up to you.</div><div>&nbsp;</div><div><h2>Please visit our GitHub repo for complete code or contribution: <a href="https://github.com/2298-Software/Load-Forecast">Load Forecast</a></h2>
@@ -201,11 +149,11 @@ future['winter'] = future['ds'].apply(winter)</pre></code>
 <h2>View Results</h2>
 
 <code><pre>pd.set_option('display.max_rows', None)
-print(forecast.to_string())</pre></code></div></div>
+printforecast.to_string())</pre></code></div></div>
 
 
 <footer>  
-    Footer region
+    2298-Software
   </footer>
   
   <!-- Load additional JS scripts here -->
