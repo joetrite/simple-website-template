@@ -5,7 +5,46 @@
 /* html is set to 62.5% so that all the REM measurements are based on 10px sizing. So basically 1.5rem = 15px */
 html {
   font-size: 62.5%;
+
 }
+
+pre {
+    background-color: #FFFFFF;
+    padding: 2px;
+    font-size: 100%;
+    color: black;
+    font-weight: bold;
+
+}
+
+code {
+    font-family: Consolas, "courier new", serif;
+    font-style: normal;
+    color: crimson;
+    padding: 10px;
+    font-size: 100%;
+        font-weight: normal;
+
+}
+
+strong {
+    font-family: Consolas, "courier new", serif;
+    font-style: normal;
+    color: black;
+    background-color: ghostwhite;
+    padding: 2px;
+    font-size: 100%;
+}
+
+sub {
+    font-family: Consolas, "courier new", serif;
+    font-style: normal;
+    color: black;
+    background-color: ghostwhite;
+    padding: 2px;
+    font-size: 100%;
+}
+
 body {
   font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
   line-height: 1.6;
@@ -52,11 +91,32 @@ h4 { font-size: 1.8rem; line-height: 1.5;  letter-spacing: -.05rem; }
 h5 { font-size: 1.5rem; line-height: 1.6;  letter-spacing: 0; }
 h6 { font-size: 1.4rem; line-height: 1.6;  letter-spacing: 0; }
 
+h2 {
+    font-family: Consolas, "courier new", "serif";
+    font-weight: bold;
+    color: black;
+    padding: 2px;
+    font-size: 150%;
+    background: transparent;
+}
+
+h1 {
+    font-family: Consolas, "courier new", "serif";
+    font-weight: bold;
+    color: black;
+    padding: 2px;
+    font-size: 250%;
+}
+
 /**
  * Paragraphs
  */
 p {
   margin: 0 auto 1.5em auto; /* bottom margin for paragraphs */
+    font-family: Consolas, "courier new", "serif";
+    font-weight: bold;
+    padding: 2px;
+    font-size: 100%;
 }
 p + p {
 
@@ -101,9 +161,9 @@ body {
   margin:25px auto;
 }
 header, #content, footer { 
-  background: rgba(0,0,0,.8); 
+  background: ghostwhite;
   padding:25px;
-  color:#FFFFFF; 
+  color: antiquewhite;
 }
 
 /* Menu Links */
@@ -138,4 +198,12 @@ ul.main-menu li a.active {
 }
 
 
+div {
+    font-family: Consolas, "courier new", serif;
+    font-style: normal;
+    color: black;
+    background-color: ghostwhite;
+    padding: 2px;
+    font-size: 100%;
+}
 
