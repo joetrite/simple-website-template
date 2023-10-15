@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Page setup -->
+    <meta charset="utf-8">
+    <title>Application Development Insights</title>
+    <meta name="description" content="Application Development Insights">
+    <meta name="author" content="2289 Software">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <link rel="icon" type="image/png" href="logo.jpg">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div>
+    <header id="header">
+
+        <img src="logo.jpg" alt="">
+        <h1>2298 Software</h1>
+
+        <!-- Menu link fragment #id should match a div id. Example: <a href="#home"> links to <div id="home"></div>  -->
+        <ul class="main-menu">
+            <li><a href="#home">home</a></li>
+            <li><a href="#about">about</a></li>
+            <li><a href="#contact">contact</a></li>
+            <li><a href="#data-apis">Data APIs</a></li>
+        </ul>
+    </header>
+
+    <h1>Load Forecasting with Prophet</h1>
+
+    This tutorial is to predict the next 72-hour load for a single meter, which can run on my laptop. I will later show
+    you how to execute this process on thousands or millions of meters using a distributed execution engine like Apache
+    Spark. The code will not change much; rather, it is wrapped into a PySpark UDF. For now, let's stick to one
+    meter
+</div>
+<div>
+    The key to accurate load forecasting is not your coding ability or which&nbsp;language or framework you use. The key
+    is
+    your domain knowledge of the&nbsp;subject you are forecasting.&nbsp;/div>
+    <div>The best thing you can do as a data scientist it to increase your domain knowledge by learning all you can
+        about
+        electricity usage, specifically the scenarios that affect load (human electricity usage patterns.)
+    </div>
+    <div>
+        <ul style="text-align: left;">
+            <li>What causes humans to consume more or less electricity?</li>
+            <li>Which appliances use the most electricity, and when are they used?</li>
+            <li>What is the effect of seasons on electricity usage?</li>
+            <li>Can we correlate usage with hours of the day?&nbsp;</li>
+            <li>Look at the min/max load for each hour, day, month, and year, and think about why it is the peak for the
+                valley.
+            </li>
+        </ul>
+        <div>Answers to these questions should drive your approach to constructing the features for your model.</div>
+    </div>
+    <div>In the code below, I have a function for SuperBowl Sunday, which is a yearly American Football game that takes
+        place in February.&nbsp; Many people change their habits that day and are at home or gathered together somewhere
+        to
+        watch the game.&nbsp; If you look at the data, you will see a difference in the usage data on that day.&nbsp;
+        You
+        might think that is irrelevant or that the playoffs should be added.&nbsp; That is where your creativity comes
+        into
+        play.&nbsp; Test if I'm wrong, and let me know. It may not affect and is a waste of time/CPU cycles.&nbsp; It's
+        up
+        to you.
+    </div>
+    <div>
+        <sub>This is an evolving tutorial, so more data and info will be added as we move forward</sub>
+
+
+        <pre><h2>Imports</h2>
+            <code>
+import pandas as pd
+from prophet import Prophet
+from datetime import datetime
+import numpy as np
+import util
+</code></pre>
+
+<h2>Functions</h2>
+<div>These seasonality functions will describe days as related or unrelated to other days.&nbsp; This is where
+    we
+    use our creativity, domain knowledge, etc. to create scenarios that would affect the forecast.&nbsp;&nbsp;
+</div>
+<pre>
+<code>
+Tell the model about SuperBowl Sunday
+
+def nfl_sunday(ds):
+date = pd.to_datetime(ds)
+if date.weekday() == 6 and (date.month &gt; 8 or date.month &lt; 2):
+    return 1
+else:
+    return 0
+</code></pre>
+<pre>
+<code>
+Tell the model about the school year. Students being at home vs. school changes electricity usage.
+
+def school(ds):
+date = pd.to_datetime(ds)
+if date.weekday() and (date.month &gt; 7 or date.month &lt; 5):
+return 1
+else:
+return 0
+</code></pre>
+
+<pre>
+<code>
+Tell the model about seasons. Summer and Winter spikes usage while Spring and Fall usage is much lower
+
+def spring(ds):
+    date = pd.to_datetime(ds)
+    if date.month in (3, 4, 5):
+        return 1
+    else:
+        return 0
+
+def summer(ds):
+    date = pd.to_datetime(ds)
+    if date.month in (6, 7, 8):
+        return 1
+    else:
+        return 0
+
+def fall(ds):
+    date = pd.to_datetime(ds)
+    if date.month in (9, 10, 11):
+        return 1
+    else:
+        return 0
+
+def winter(ds):
+    date = pd.to_datetime(ds)
+    if date.month in (12, 1, 2):
+        return 1
+    else:
+        return 0
+</code></pre>
+
+<h2>Data Setup</h2>
+<pre>
+<code>
+# flat, linear, or logistic for growth
+model_type = 'flat'
+
+history: pd.DataFrame = util.get_voltage_data()
+row_cnt: int = len(history.index)
+
+# we want to leave the last 864 rows for testing the model
+history = history.head(row_cnt - 864)
+
+# adding functions to pandas dataframe
+history['nfl_sunday'] = history['ds'].apply(nfl_sunday)
+history['school'] = history['ds'].apply(school)
+history['spring'] = history['ds'].apply(spring)
+history['summer'] = history['ds'].apply(summer)
+history['fall'] = history['ds'].apply(fall)
+history['winter'] = history['ds'].apply(winter)
+</code></pre>
+
+<pre><h2>Model Setup</h2><code>
+m = Prophet()
+m.add_seasonality('nfl_sunday')
+m.add_seasonality('school')
+m.add_seasonality('spring')
+m.add_seasonality('summer')
+m.add_seasonality('fall')
+m.add_seasonality('winter')
+m.add_country_holidays(country_name='US')
+</code></pre>
+<pre>
+<h2>Train the model</h2>
+<code>
+m.fit(history)
+</code></pre>
+
+<pre>
+<h2>Create Future Dataframe</h2>
+<code>
+# we are working with 5 minute interval data which is 12 readings an hour
+# and we need 72 hour forecast for a total of 864 readings
+future = m.make_future_dataframe(periods=12*72, freq='5m', include_history=False)
+future['nfl_sunday'] = future['ds'].apply(nfl_sunday)
+future['school_in'] = future['ds'].apply(school_in)
+future['spring'] = future['ds'].apply(spring)
+future['summer'] = future['ds'].apply(summer)
+future['fall'] = future['ds'].apply(fall)
+future['winter'] = future['ds'].apply(winter)
+</code>
+</pre>
+<pre>
+<h2>Execute Model</h2>
+<code> forecast = m.predict(future)[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
+</code></pre>
+
+        <pre>
+<h2>View Results</h2>
+<code>
+pd.set_option('display.max_rows', None)
+print(forecast.to_string())
+</code></pre>
+    </div>
+</div>
+
+
+<footer>
+    2298-Software
+</footer>
+
+<!-- Load additional JS scripts here -->
+<script type="text/javascript" src="script.js"></script>
+
+</body>
+</html>
+
