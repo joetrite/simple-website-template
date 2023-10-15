@@ -1,3 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- Page setup -->
+    <meta charset="utf-8">
+    <title>Application Development Insights</title>
+    <meta name="description" content="Application Development Insights">
+    <meta name="author" content="2289 Software">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <link rel="icon" type="image/png" href="favicon.png">
+  
+    <!-- Stylesheets -->
+    <!-- Reset default styles and add support for google fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
+   
+    <!-- Custom styles -->
+    <link href="style.css" rel="stylesheet" type="text/css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>    
+
+    <!-- Want to add Bootstrap? -->
+    <!-- Visit: https://getbootstrap.com/docs/4.3/getting-started/introduction/ -->
+    
+  </head>
+  
+  <body>
+
+    <header id="header">
+      <img src="logo.jpg">
+      <h1>2298 Software</h1>
+     
+      <!-- Menu link fragment #id should match a div id. Example: <a href="#home"> links to <div id="home"></div>  -->
+      <ul class="main-menu">
+        <li><a href="#home">home</a></li>
+        <li><a href="#about">about</a></li>
+        <li><a href="#contact">contact</a></li>
+        <li><a href="#data-apis">Data APIs</a></li>
+      </ul>                 
+    </header>
+   
+    <div id="container">
+      <div class="inner">
+        <div id="content"> 
+
 
 <p>This is a Load Forecast tutorial.  We need to predict the load on the electric grid
   for the next 72 hours to generate or purchase enough electricity to cover the load. We need to pick the device level on the grid we will estimate to do this.  The lowest level will be the meter (residential electric meter).  So, forecast the load needed on each meter and roll that data up to the substation.  Or we could use the substation load only in our estimation, which will work but is not as accurate or fine-grained as the meter level.
@@ -167,3 +213,4 @@ print(forecast.to_string())</pre></code></div></div>
   
 </body>
 </html>
+
